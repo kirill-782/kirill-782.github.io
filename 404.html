@@ -5,37 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redirect Page</title>
     <script>
-        // Функция для обработки редиректа
+
+        const redirects = {
+            com: 'https://irinabot.com/telegramAuth',
+            ru: 'https://irinabot.ru/telegramAuth',
+            local: 'http://localhost:3000/telegramAuth'
+        };
+
         function redirect() {
             // Получаем путь и hash
-            const path = window.location.pathname;
+            const path = window.location.pathname.split('/');
             const hash = window.location.hash;
 
-            // Определяем нужный URL в зависимости от пути
-            let baseUrl;
-            if (path.includes('/com')) {
-                baseUrl = 'https://irinabot.com/telegramAuth';
-            } else if (path.includes('/ru')) {
-                baseUrl = 'https://irinabot.ru/telegramAuth';
-            } else if (path.includes('/local')) {
-                baseUrl = 'http://localhost:3000/telegramAuth';
-            } else {
+            const key = path[1];
+            
+            const baseUrl = redirects[key];
+            if (!baseUrl) {
                 console.error('Неизвестный путь');
                 return;
             }
 
-            // Получаем часть пути после основного сегмента
-            const state = path.split('/')[2] || '';
+            const state = path[2] || '';
 
-            // Сохраняем параметры hash и добавляем state
-            const hashParams = new URLSearchParams(hash.slice(1)); // Удаляем # перед началом hash
+            const hashParams = new URLSearchParams(hash.slice(1));
             hashParams.set('state', state);
 
-            // Выполняем редирект
             window.location.href = `${baseUrl}#${hashParams.toString()}`;
         }
 
-        // Запускаем редирект при загрузке страницы
         window.onload = redirect;
     </script>
 </head>
