@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redirect Page</title>
     <script>
+    
+        function utf8_to_b64(str) {
+            return window.btoa(unescape(encodeURIComponent(str)));
+        }
 
         const redirects = {
             com: 'https://irinabot.com/telegramAuth',
@@ -26,9 +30,15 @@
             }
 
             const state = path[2] || '';
+            
+            const queryObject = {};
+            params.forEach((value, key) => {
+              queryObject[key] = value;
+            });
 
-            const hashParams = new URLSearchParams(hash.slice(1));
+            const hashParams = new URLSearchParams();
             hashParams.set('state', state);
+            hashParams.set('tgAuthResult', utf8_to_b64(JSON.stringify(queryObject)));
 
             window.location.href = `${baseUrl}#${hashParams.toString()}`;
         }

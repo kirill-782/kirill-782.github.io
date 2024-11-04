@@ -3,60 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Open New Window</title>
+    <title>Так надо</title>
 </head>
 <body>
-    <h1>Открытие нового окна с параметрами</h1>
-    <button id="openWindowBtn">Click again. Кликни еще раз</button>
+Телеграмм особенный, поэтому делаем для него отдельные костыли. Нажми на виджет, чтобы продолжить.<br>
+<script>
 
-    <script>
-        // Статический URL для нового окна
-        const staticUrl = "https://oauth.telegram.org/auth";
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+    
+const script = document.createElement("script");
 
-        // Получение query параметров из текущего URL
-        function getQueryParams() {
-            const params = new URLSearchParams(window.location.search);
-            return params.toString();
-        }
+script.async = true;
+script.src = "https://telegram.org/js/telegram-widget.js?22";
+script.setAttribute("data-telegram-login", "IrinaHost_bot");
+script.setAttribute("data-size", "large");
+script.setAttribute("data-auth-url", getQueryParam("returnPath"));
 
-        document.getElementById("openWindowBtn").addEventListener("click", () => {
-            const queryParams = getQueryParams();
-            const newWindowUrl = `${staticUrl}?${queryParams}`;
-            const newWindow = window.open(newWindowUrl, "_blank");
+document.body.appendChild(script);
+</script>
 
-            // Добавляем слушатель для сообщений от нового окна
-            window.addEventListener("message", (event) => {
-                
-                
-                // Разбираем данные из JSON-строки
-                const data = JSON.parse(event.data);
-                
-                // Проверяем, что событие - это "auth_result"
-                if (data.event === 'auth_result') {
-                
-                    console.log(event);
-                
-                    const authResult = data.result;
-                    console.log("ID:", authResult.id);
-                    console.log("First Name:", authResult.first_name);
-                    console.log("Last Name:", authResult.last_name);
-                    console.log("Username:", authResult.username);
-                    console.log("Photo URL:", authResult.photo_url);
-                    console.log("Auth Date:", authResult.auth_date);
-                    console.log("Hash:", authResult.hash);
-
-                    // Здесь вы можете вызвать любой код, который требуется при получении результата авторизации
-                }
-                
-                
-                if (event.source === newWindow) {
-                    const redirectUrl = new URLSearchParams(window.location.search).get("redirectUrl");
-                    if (redirectUrl) {
-                        window.location.href = redirectUrl;
-                    }
-                }
-            });
-        });
-    </script>
 </body>
 </html>
