@@ -35,7 +35,10 @@
             
             const queryObject = {};
             params.forEach((value, key) => {
-              queryObject[key] = value;
+                if(key === "id" || key === "auth_date")
+                    queryObject[key] = parseInt( value );
+                else
+                    queryObject[key] = value;
             });
 
             const hashParams = new URLSearchParams();
