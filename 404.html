@@ -21,13 +21,15 @@
             const path = window.location.pathname.split('/');
             const hash = window.location.hash;
 
-            const key = path[1];
+            /*const key = path[1];
             
             const baseUrl = redirects[key];
             if (!baseUrl) {
                 console.error('Неизвестный путь');
                 return;
-            }
+            }*/
+            
+            const redirect = decodeURIComponent(path[1]);
 
             const state = path[2] || '';
             
@@ -43,9 +45,9 @@
 
             const hashParams = new URLSearchParams();
             hashParams.set('state', state);
-            hashParams.set('tgAuthResult', utf8_to_b64(JSON.stringify(queryObject)));
+            hashParams.set('access_token', utf8_to_b64(JSON.stringify(queryObject)));
 
-            window.location.href = `${baseUrl}#${hashParams.toString()}`;
+            window.location.href = `${redirect}#${hashParams.toString()}`;
         }
 
         window.onload = redirect;
