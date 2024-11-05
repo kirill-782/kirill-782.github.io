@@ -29,9 +29,9 @@
                 return;
             }*/
             
-            const redirect = decodeURIComponent(path[1]);
+            const redirect = decodeURIComponent(path[2]);
 
-            const state = path[2] || '';
+            const state = path[3] || '';
             
             const params = new URLSearchParams(window.location.search);
             
